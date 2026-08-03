@@ -1,45 +1,56 @@
-#!/bin/bash
+### AnyKernel3 Ramdisk Mod Script
+## armado para Samsung Galaxy A7 2018 (a7y18lte, exynos7885) - LineageOS 18.1
+## kernel compilado desde exynos7885-dev/kernel_samsung_exynos7885 (lineage-18.1)
+## con GCC 6.4.1 + los 3 fixes de código verificados (decon_reg.c, topology.c,
+## nl80211_vendor.c) - sin ningun KCFLAGS de supresion de warnings.
 
-## AnyKernel3
-## Samsung Galaxy A7 2018
-## a7y18lte
-
-properties() {
-kernel.string=Samsung Galaxy A7 2018 OC Kernel
+### AnyKernel setup
+# global properties
+properties() { '
+kernel.string=a7y18lte custom kernel (GCC 6.4.1, lineage-18.1)
 do.devicecheck=1
-device.name1=a7y18lte
 do.modules=0
-do.systemless=0
+do.systemless=1
 do.cleanup=1
 do.cleanuponabort=0
-}
+device.name1=a7y18lte
+device.name2=SM-A750F
+device.name3=SM-A750FN
+device.name4=SM-A750G
+device.name5=
+supported.versions=
+supported.patchlevels=
+supported.vendorpatchlevels=
+'; } # end properties
 
-block=/dev/block/by-name/BOOT;
+### AnyKernel install
+# boot files attributes
+boot_attributes() {
+set_perm_recursive 0 0 755 644 $RAMDISK/*;
+set_perm_recursive 0 0 750 750 $RAMDISK/init* $RAMDISK/sbin;
+} # end attributes
 
-is_slot_device=0;
+# boot shell variables
+# BLOCK confirmado en el dispositivo real via:
+#   ls -la /dev/block/by-name/ | grep -i boot
+#   -> BOOT -> /dev/block/mmcblk0p11
+BLOCK=/dev/block/by-name/BOOT;
+IS_SLOT_DEVICE=0;
+RAMDISK_COMPRESSION=auto;
+PATCH_VBMETA_FLAG=auto;
 
-ramdisk_compression=auto;
-
-patch_vbmeta_flag=0;
-
-
+# import functions/variables and setup patching - see for reference (DO NOT REMOVE)
 . tools/ak3-core.sh;
 
+# boot install
+dump_boot;
 
-split_boot;
+# No se modifica nada del ramdisk (init.rc, fstab, etc) - este paquete
+# SOLO reemplaza el kernel Image dentro de boot. El ramdisk, dtb, y
+# todo lo demas dentro de la particion BOOT actual se conserva tal
+# cual, incluida la configuracion de Magisk si ya estaba instalado
+# (dump_boot/write_boot de AnyKernel3 re-parchea Magisk automaticamente
+# si lo detecta).
 
-
-flash_boot;
-
-
-ui_print "=============================="
-ui_print " Samsung Galaxy A7 2018"
-ui_print " a7y18lte OC Kernel"
-ui_print ""
-ui_print " CPU:"
-ui_print " A73 2288 MHz"
-ui_print " A53 1690 MHz"
-ui_print ""
-ui_print " GPU:"
-ui_print " Mali-G71 MP2 1300 MHz"
-ui_print "=============================="
+write_boot;
+## end boot install
