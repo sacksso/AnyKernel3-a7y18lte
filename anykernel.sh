@@ -20,8 +20,8 @@ supported.patchlevels=
 '; }
 
 # Set shell variables
-block=boot;
-is_slot_device=auto;
+block=/dev/block/platform/13500000.dwmmc0/by-name/BOOT;
+is_slot_device=0;
 ramdisk_compression=auto;
 
 # Import the core script
