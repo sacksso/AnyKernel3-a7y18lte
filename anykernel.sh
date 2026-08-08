@@ -1,57 +1,31 @@
 #!/sbin/sh
-### AnyKernel3 Ramdisk Mod Script
-## armado para Samsung Galaxy A7 2018 (a7y18lte, exynos7885) - LineageOS 18.1
-## kernel compilado desde exynos7885-dev/kernel_samsung_exynos7885 (lineage-18.1)
-## con GCC 6.4.1 + los 3 fixes de código verificados (decon_reg.c, topology.c,
-## nl80211_vendor.c) - sin ningun KCFLAGS de supresion de warnings.
+#
+# AnyKernel3 script - a7y18lte
+#
+# This is a standard template. Adjust as needed.
 
-### AnyKernel setup
-# global properties
-properties() { '
-kernel.string=a7y18lte custom kernel (GCC 6.4.1, lineage-18.1)
-do.devicecheck=1
-do.modules=0
-do.systemless=1
-do.cleanup=1
-do.cleanuponabort=0
+# Set up variables
+kernel=Image
 device.name1=a7y18lte
 device.name2=SM-A750F
 device.name3=SM-A750FN
 device.name4=SM-A750G
 device.name5=
-supported.versions=
-supported.patchlevels=
-supported.vendorpatchlevels=
-'; } # end properties
+device.name6=
 
-### AnyKernel install
-# boot files attributes
-boot_attributes() {
-set_perm_recursive 0 0 755 644 $RAMDISK/*;
-set_perm_recursive 0 0 750 750 $RAMDISK/init* $RAMDISK/sbin;
-} # end attributes
+# Set up paths
+block=/dev/block/platform/13500000.dwmmc0/by-name/BOOT
+is_slot_device=0
+ramdisk_compression=auto
 
-# boot shell variables
-# BLOCK confirmado en el dispositivo real via:
-#   ls -la /dev/block/by-name/ | grep -i boot
-#   -> BOOT -> /dev/block/mmcblk0p11
-BLOCK=/dev/block/by-name/BOOT;
-IS_SLOT_DEVICE=0;
-RAMDISK_COMPRESSION=auto;
-PATCH_VBMETA_FLAG=auto;
+# Set up functions
+. /tmp/anykernel/tools/ak3-core.sh
 
-# import functions/variables and setup patching - see for reference (DO NOT REMOVE)
-. tools/ak3-core.sh;
-
-# boot install
+# Dump current boot image for modification
 dump_boot;
 
-# No se modifica nada del ramdisk (init.rc, fstab, etc) - este paquete
-# SOLO reemplaza el kernel Image dentro de boot. El ramdisk, dtb, y
-# todo lo demas dentro de la particion BOOT actual se conserva tal
-# cual, incluida la configuracion de Magisk si ya estaba instalado
-# (dump_boot/write_boot de AnyKernel3 re-parchea Magisk automaticamente
-# si lo detecta).
-
+# Write the kernel (Image) to the boot image
 write_boot;
-## end boot install
+
+# Done
+reset_ak;
