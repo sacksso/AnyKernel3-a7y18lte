@@ -1,3 +1,4 @@
+#!/sbin/sh
 ### AnyKernel3 Ramdisk Mod Script
 ## armado para Samsung Galaxy A7 2018 (a7y18lte, exynos7885) - LineageOS 18.1
 ## kernel compilado desde exynos7885-dev/kernel_samsung_exynos7885 (lineage-18.1)
