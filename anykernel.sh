@@ -20,7 +20,7 @@ supported.patchlevels=
 '; }
 
 # Set shell variables
-block=/dev/block/platform/13500000.dwmmc0/by-name/BOOT;
+BLOCK=/dev/block/platform/13500000.dwmmc0/by-name/BOOT;
 is_slot_device=0;
 ramdisk_compression=auto;
 
