@@ -4,7 +4,7 @@
 
 # Set properties
 properties() { '
-kernel.string=Kernel for Samsung Galaxy A7 2018 (a7y18lte) - Clean SELinux
+kernel.string=Kernel for Samsung Galaxy A7 2018 (a7y18lte) - Base (Permissive SELinux)
 do.devicecheck=1
 do.modules=0
 do.systemless=0
